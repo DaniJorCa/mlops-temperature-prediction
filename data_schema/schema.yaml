@@ -1,0 +1,20 @@
+columns:
+  TMIN: float64
+  TMED: float64
+  Lluvia: int64
+  Nieve: int64
+  Granizo: int64
+  Tormenta: int64
+  Niebla: int64
+  Rocio: int64
+  Escarcha: int64
+  Otros: float64
+  target_t_max: float64
+  dia_sen: float64
+  dia_cos: float64
+  mes_sen: float64
+  mes_cos: float64
+  t_max_lag1: float64
+  t_max_lag2: float64
+  t_max_rolling3: float64
+  dif_t_ayer: float64
