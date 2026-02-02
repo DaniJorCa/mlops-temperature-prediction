@@ -1,3 +1,6 @@
 notebooks/
 .env
 env/
+__pycache__/
+__init__.py
+/artifacts

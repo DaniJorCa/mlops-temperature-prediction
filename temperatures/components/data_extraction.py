@@ -5,7 +5,6 @@ import pandas as pd
 from dotenv import load_dotenv
 
 from temperatures.entity.config_entity import DataExtractionConfig
-from temperatures.constant.constants import DATA_EXTRACTION_DIR
 from temperatures.entity.artifact_entity import DataExtractionArtifact
 
 load_dotenv()
@@ -18,7 +17,7 @@ class DataExtraction:
         try:
             self.data_extraction_config = data_extraction_config
         except Exception as e:
-            raise(f"No se ha podido cargar la configuracion {e}")
+            raise Exception(f"No se ha podido cargar la configuracion {e}")
         
     def export_collection_as_df(self):
         """
@@ -39,14 +38,14 @@ class DataExtraction:
             return df
 
         except Exception as e:
-            raise(f"Not possible load data from MongoDB {e}")
+            raise Exception(f"Not possible load data from MongoDB {e}")
 
     def save_raw_data(self, df:pd.DataFrame):
         try:
             os.makedirs(self.data_extraction_config.raw_data_path, exist_ok=1)
-            df.to_csv(os.path.join(self.data_extraction_config.raw_data_path, self.data_extraction_config.file_name))
+            df.to_csv(os.path.join(self.data_extraction_config.raw_data_path, self.data_extraction_config.file_name), index=False)
         except Exception as e:
-            raise(f"Not possible save raw data from MongoDB to raw data folder {e}")
+            raise Exception(f"Not possible save raw data from MongoDB to raw data folder {e}")
 
     def initiate_data_extraction(self):
         try:
@@ -55,5 +54,6 @@ class DataExtraction:
             data_extraction_artifact = DataExtractionArtifact(
                 raw_data_file_path = os.path.join(self.data_extraction_config.raw_data_path,self.data_extraction_config.file_name)
             )
+            return data_extraction_artifact
         except Exception as e:
-            raise(f"Not possible to initiate data extraction {e}")
+            raise Exception(f"Not possible to initiate data extraction {e}")
