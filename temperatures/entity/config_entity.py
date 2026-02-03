@@ -26,3 +26,12 @@ class DataIngestionConfig:
         self.feature_store_path = os.path.join(self.data_ingestion_path, constants.FEATURE_STORE_PATH)
         self.ingested_path = os.path.join(self.data_ingestion_path, constants.INGESTED_PATH)
         self.scaler_path = os.path.join(self.data_ingestion_path,constants.SCALER_PATH)
+
+
+class DataValidationConfig:
+    def __init__(self, training_pipeline_config:TrainingPipelineConfig):
+        self.data_validation_path = os.path.join(training_pipeline_config.artifact_dir, constants.DATA_VALIDATION_DIR_NAME)
+        self.data_validation_dir = os.path.join(self.data_validation_path, constants.DATA_VALIDATION_VALID_DIR)
+        self.data_invalid_dir = os.path.join(self.data_validation_path, constants.DATA_VALIDATION_INVALID_DIR)
+        self.drift_report_dir = os.path.join(self.data_validation_path, constants.DATA_VALIDATION_DRIFT_REPORT_DIR)
+        self.drift_report_filename = os.path.join(self.drift_report_dir, constants.DATA_VALIDATION_DRIFT_REPORT_FILE_NAME)

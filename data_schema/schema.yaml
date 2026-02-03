@@ -1,4 +1,5 @@
 columns:
+  TMAX: float64
   TMIN: float64
   TMED: float64
   Lluvia: int64
@@ -8,8 +9,7 @@ columns:
   Niebla: int64
   Rocio: int64
   Escarcha: int64
-  Otros: float64
-  target_t_max: float64
+  Otros: int64
   dia_sen: float64
   dia_cos: float64
   mes_sen: float64
@@ -18,3 +18,4 @@ columns:
   t_max_lag2: float64
   t_max_rolling3: float64
   dif_t_ayer: float64
+  target_t_max: float64

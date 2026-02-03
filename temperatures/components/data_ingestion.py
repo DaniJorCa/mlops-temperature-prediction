@@ -64,8 +64,8 @@ class DataIngestion:
 
         os.makedirs(os.path.join(self.data_ingestion_config.ingested_path), exist_ok=True)
 
-        train.to_csv(os.path.join(self.data_ingestion_config.ingested_path, constants.TRAIN_FILE_NAME))
-        test.to_csv(os.path.join(self.data_ingestion_config.ingested_path, constants.TEST_FILE_NAME))
+        train.to_csv(os.path.join(self.data_ingestion_config.ingested_path, constants.TRAIN_FILE_NAME), index = False)
+        test.to_csv(os.path.join(self.data_ingestion_config.ingested_path, constants.TEST_FILE_NAME), index = False)
 
     def initiate_data_ingestion(self):
         dataframe = self.scale_df()
