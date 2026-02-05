@@ -25,7 +25,7 @@ class DataIngestionConfig:
         self.data_ingestion_path = os.path.join(training_pipeline_config.artifact_dir, constants.DATA_INGESTION_PATH)
         self.feature_store_path = os.path.join(self.data_ingestion_path, constants.FEATURE_STORE_PATH)
         self.ingested_path = os.path.join(self.data_ingestion_path, constants.INGESTED_PATH)
-        self.scaler_path = os.path.join(self.data_ingestion_path,constants.SCALER_PATH)
+        
 
 
 class DataValidationConfig:
@@ -35,3 +35,10 @@ class DataValidationConfig:
         self.data_invalid_dir = os.path.join(self.data_validation_path, constants.DATA_VALIDATION_INVALID_DIR)
         self.drift_report_dir = os.path.join(self.data_validation_path, constants.DATA_VALIDATION_DRIFT_REPORT_DIR)
         self.drift_report_filename = os.path.join(self.drift_report_dir, constants.DATA_VALIDATION_DRIFT_REPORT_FILE_NAME)
+
+
+class DataTransformationConfig:
+    def __init__(self, training_pipeline_config:TrainingPipelineConfig):
+        self.data_transformation_path = os.path.join(training_pipeline_config.artifact_dir, constants.DATA_TRANSFORMATION_PATH)
+        self.preprocessor_path = os.path.join(self.data_transformation_path, constants.PREPROCESSOR_PATH)
+        self.data_transformed_path = os.path.join(self.data_transformation_path, constants.DATA_TRANSFORMED_PATH)
