@@ -78,8 +78,8 @@ class DataTransformation:
 
             return DataTransformationArtifact(
                 processor_file_path = self.data_transformation_config.preprocessor_path,
-                transformed_test_path= os.path.join(self.data_transformation_config.data_transformation_path, constants.TEST_TRANSFORMED_FILE),
-                transformed_train_path= os.path.join(self.data_transformation_config.data_transformation_path, constants.TRAIN_TRANSFORMED_FILE)
+                transformed_test_path= os.path.join(self.data_transformation_config.data_transformed_path, constants.TEST_TRANSFORMED_FILE),
+                transformed_train_path= os.path.join(self.data_transformation_config.data_transformed_path, constants.TRAIN_TRANSFORMED_FILE)
             )
 
         except Exception as e:

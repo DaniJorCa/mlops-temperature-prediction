@@ -3,13 +3,15 @@ from temperatures.entity.config_entity import (
     DataExtractionConfig,
     DataIngestionConfig,
     DataValidationConfig,
-    DataTransformationConfig
+    DataTransformationConfig,
+    ModelTrainerConfig
 )
 
 from temperatures.components.data_extraction import DataExtraction 
 from temperatures.components.data_ingestion import DataIngestion
 from temperatures.components.data_validation import DataValidation
 from temperatures.components.data_transformation import DataTransformation
+from temperatures.components.model_trainer import ModelTrainer
 
 
 
@@ -34,7 +36,13 @@ if __name__=='__main__':
         data_transformation_config = DataTransformationConfig(trainingPipelineConfig)
         data_transformation = DataTransformation(data_validation_artifact, data_transformation_config)
         data_transformation_artifact = data_transformation.initiate_data_transformation()
-        print(data_transformation_config)
+        print(data_transformation_artifact)
+
+        model_trainer_config = ModelTrainerConfig(trainingPipelineConfig)
+        model_trainer = ModelTrainer(data_transformation_artifact, model_trainer_config)
+        model_train_artifact = model_trainer.initiate_train_model()
+        print(model_train_artifact)
+
 
     except Exception as e:
         print(f"Imposible to load raw data {e}")

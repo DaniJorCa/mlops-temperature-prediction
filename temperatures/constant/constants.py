@@ -13,9 +13,6 @@ TEST_FILE_NAME: str = "test.csv"
 
 SCHEMA_FILE_PATH = os.path.join("data_schema", "schema.yaml")
 
-SAVED_MODEL_DIR =os.path.join("saved_models")
-MODEL_FILE_NAME = "model.pkl"
-
 KNN_IMPUTER_PARAMS: dict = { 
     "n_neighbors": 5, 
     "weights":'distance', 
@@ -64,6 +61,17 @@ TRAIN_TRANSFORMED_FILE: str = "test.npy"
 TEST_TRANSFORMED_FILE: str = "train.npy"
 PREPROCESSOR_NAME: str = 'processor.pkl'
 
+
+"""
+Constants to TrainingModel pipeline
+"""
+MODEL_TRAINER_DIR: str = 'model_trainer'
+MODEL_TRAINED_PATH: str = 'best_model'
+PREDICTOR_OBJECT_PATH: str = 'predictor_object'
+MODEL_FILE_NAME = "model.pkl"
+PREDICTOR_NAME = "model_predictor.pkl"
+MODEL_TRAINER_EXPECTED_SCORE: float = 0.8
+MODEL_TRAINER_OVER_FIITING_UNDER_FITTING_THRESHOLD: float = 0.05
 
 
    

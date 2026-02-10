@@ -42,3 +42,14 @@ class DataTransformationConfig:
         self.data_transformation_path = os.path.join(training_pipeline_config.artifact_dir, constants.DATA_TRANSFORMATION_PATH)
         self.preprocessor_path = os.path.join(self.data_transformation_path, constants.PREPROCESSOR_PATH)
         self.data_transformed_path = os.path.join(self.data_transformation_path, constants.DATA_TRANSFORMED_PATH)
+
+
+class ModelTrainerConfig:
+    def __init__(self, training_pipeline_config: TrainingPipelineConfig):
+        self.model_trainer_path = os.path.join(training_pipeline_config.artifact_dir, constants.MODEL_TRAINER_DIR)
+        self.model_trained_path = os.path.join(self.model_trainer_path, constants.MODEL_TRAINED_PATH)
+        self.model_trained_file = os.path.join(self.model_trained_path, constants.MODEL_FILE_NAME)
+        self.predictor_object_path = os.path.join(self.model_trainer_path, constants.PREDICTOR_OBJECT_PATH)
+        self.predictor_object_file = os.path.join(self.predictor_object_path, constants.PREDICTOR_NAME)
+        self.model_trainer_expected_score = constants.MODEL_TRAINER_EXPECTED_SCORE
+        self.model_trainer_over_under_fitting_threshold = constants.MODEL_TRAINER_OVER_FIITING_UNDER_FITTING_THRESHOLD
