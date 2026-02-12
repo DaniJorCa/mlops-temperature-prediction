@@ -57,8 +57,8 @@ Constants to Transformation pipeline
 DATA_TRANSFORMATION_PATH: str = "data_transformation"
 PREPROCESSOR_PATH: str = "preprocessor"
 DATA_TRANSFORMED_PATH: str = "transformed"
-TRAIN_TRANSFORMED_FILE: str = "test.npy"
-TEST_TRANSFORMED_FILE: str = "train.npy"
+TRAIN_TRANSFORMED_FILE: str = "train.npy"
+TEST_TRANSFORMED_FILE: str = "test.npy"
 PREPROCESSOR_NAME: str = 'processor.pkl'
 
 

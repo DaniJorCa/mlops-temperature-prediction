@@ -27,7 +27,6 @@ class DataIngestionConfig:
         self.ingested_path = os.path.join(self.data_ingestion_path, constants.INGESTED_PATH)
         
 
-
 class DataValidationConfig:
     def __init__(self, training_pipeline_config:TrainingPipelineConfig):
         self.data_validation_path = os.path.join(training_pipeline_config.artifact_dir, constants.DATA_VALIDATION_DIR_NAME)

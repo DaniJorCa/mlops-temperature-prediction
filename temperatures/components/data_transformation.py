@@ -77,7 +77,7 @@ class DataTransformation:
             )
 
             return DataTransformationArtifact(
-                processor_file_path = self.data_transformation_config.preprocessor_path,
+                processor_file_path = os.path.join(self.data_transformation_config.preprocessor_path,constants.PREPROCESSOR_NAME),
                 transformed_test_path= os.path.join(self.data_transformation_config.data_transformed_path, constants.TEST_TRANSFORMED_FILE),
                 transformed_train_path= os.path.join(self.data_transformation_config.data_transformed_path, constants.TRAIN_TRANSFORMED_FILE)
             )

@@ -1,4 +1,5 @@
 pandas
+dagshub
 numpy
 mlflow
 pymongo

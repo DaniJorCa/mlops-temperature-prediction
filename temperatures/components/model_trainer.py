@@ -18,7 +18,7 @@ from temperatures.entity.artifact_entity import DataTransformationArtifact
 from temperatures.entity.config_entity import ModelTrainerConfig
 
 
-dagshub.init(repo_owner='DaniJorCa', repo_name='mlops-temperature-prediction', mlflow=True)
+#dagshub.init(repo_owner='DaniJorCa', repo_name='mlops-temperature-prediction', mlflow=True)
 
 load_dotenv()
 
@@ -36,27 +36,34 @@ class ModelTrainer():
 
     
 
-    def track_mlflow(self, best_model, classificationmetric):
+    def track_mlflow(self, best_model, model_name, train_metrics, test_metrics):
         mlflow.set_registry_uri(MLFLOW_TRACKING_URI)
         tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
         with mlflow.start_run():
-            mean_absolute_error=classificationmetric.mean_absolute_error
-            mean_squared_error=classificationmetric.mean_squared_error
-            r2_score=classificationmetric.r2_score
+            train_mean_absolute_error=train_metrics.mean_absolute_error
+            train_mean_squared_error=train_metrics.mean_squared_error
+            train_r2_score=train_metrics.r2_score
 
-            mlflow.log_metric("mean_absolute_error",mean_absolute_error)
-            mlflow.log_metric("mean_squared_error",mean_squared_error)
-            mlflow.log_metric("r2_score",r2_score)
-            mlflow.sklearn.log_model(best_model,"model")
+            test_mean_absolute_error=test_metrics.mean_absolute_error
+            test_mean_squared_error=test_metrics.mean_squared_error
+            test_r2_score=test_metrics.r2_score
+
+            mlflow.log_metric("train_mean_absolute_error",train_mean_absolute_error)
+            mlflow.log_metric("train_mean_squared_error",train_mean_squared_error)
+            mlflow.log_metric("train_r2_score",train_r2_score)
+
+            mlflow.log_metric("test_mean_absolute_error",test_mean_absolute_error)
+            mlflow.log_metric("test_mean_squared_error",test_mean_squared_error)
+            mlflow.log_metric("test_r2_score",test_r2_score)
 
             # Model registry does not work with file store
             if tracking_url_type_store != "file":
 
-                # Register the model
+                # Register the modelgoogle.es\
                 # There are other ways to use the Model Registry, which depends on the use case,
                 # please refer to the doc for more information:
                 # https://mlflow.org/docs/latest/model-registry.html#api-workflow
-                mlflow.sklearn.log_model(best_model, "model", registered_model_name=best_model)
+                mlflow.sklearn.log_model(best_model, "model", registered_model_name=model_name)
             else:
                 mlflow.sklearn.log_model(best_model, "model")
 
@@ -75,28 +82,25 @@ class ModelTrainer():
                 }
             },
 
-            "gradient_boosting": {
-                "model": GradientBoostingRegressor(),
-                "params": {
-                    "n_estimators": [100, 300],
-                    "learning_rate": [0.01, 0.05, 0.1],
-                    "max_depth": [3, 5]
-                }
-            },
+            # "gradient_boosting": {
+            #     "model": GradientBoostingRegressor(),
+            #     "params": {
+            #         "n_estimators": [100, 300],
+            #         "learning_rate": [0.01, 0.05, 0.1],
+            #         "max_depth": [3, 5]
+            #     }
+            # },
 
-            "knn": {
-                "model": KNeighborsRegressor(),
-                "params": {
-                    "n_neighbors": [3, 5, 7, 11],
-                    "weights": ["uniform", "distance"],
-                    "p": [1, 2]
-                }
-            }
+            # "knn": {
+            #     "model": KNeighborsRegressor(),
+            #     "params": {
+            #         "n_neighbors": [3, 5, 7, 11],
+            #         "weights": ["uniform", "distance"],
+            #         "p": [1, 2]
+            #     }
+            # }
 
         }
-
-
-
 
         model_report:dict=evaluate_models(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test, models_and_grids=models_and_grids)
 
@@ -109,17 +113,14 @@ class ModelTrainer():
 
         if best_model:
             y_train_pred=best_model.predict(X_train)
-            classification_train_metric=get_classification_score(best_model_metrics=model_report[best_model_name])
+            y_test_pred=best_model.predict(X_test)
+
+            train_metrics, test_metrics=get_classification_score(X_train, y_train, y_train_pred, X_test, y_test, y_test_pred)
 
             ## Track the experiements with mlflow
-            self.track_mlflow(best_model,classification_train_metric)
+            self.track_mlflow(best_model, best_model_name, train_metrics=train_metrics, test_metrics=test_metrics)
 
-            y_test_pred=best_model.predict(X_test)
-            classification_test_metric=get_classification_score(y_true=y_test,y_pred=y_test_pred)
-
-            self.track_mlflow(best_model,classification_test_metric)
-
-            preprocessor = load_pickle_object(file_path=self.data_transformation_artifact.processor_file_path)
+            preprocessor = load_pickle_object(obj_path=self.data_transformation_artifact.processor_file_path)
 
             model_dir_path = os.path.dirname(self.data_model_trainer_config.model_trainer_path)
             os.makedirs(model_dir_path,exist_ok=True)
@@ -127,18 +128,18 @@ class ModelTrainer():
 
             os.makedirs(self.data_model_trainer_config.predictor_object_path,exist_ok=True)
             temperature_predictor_model=TemperaturePredictorModel(preprocessor=preprocessor,model=best_model)
-            save_pickle_object(self.data_model_trainer_config.predictor_object_file,obj=TemperaturePredictorModel)
+            save_pickle_object(obj=temperature_predictor_model, obj_name=self.data_model_trainer_config.predictor_object_file)
             
             
             #model pusher
             os.makedirs(self.data_model_trainer_config.model_trained_path,exist_ok=True)
-            save_pickle_object(self.data_model_trainer_config.model_trained_file,best_model)
+            save_pickle_object(obj=best_model, obj_name=self.data_model_trainer_config.model_trained_file)
 
             ## Model Trainer Artifact
             model_trainer_artifact=ModelTrainerArtifact(
                 trained_model_file_path=self.model_trainer_config.trained_model_file_path,
-                train_metric_artifact=classification_train_metric,
-                test_metric_artifact=classification_test_metric
+                train_metric_artifact=train_metrics,
+                test_metric_artifact=test_metrics
             )
 
             return model_trainer_artifact
@@ -154,6 +155,8 @@ class ModelTrainer():
             #loading training array and testing array
             train_arr = load_numpy_array_data(train_file_path)
             test_arr = load_numpy_array_data(test_file_path)
+
+            print(train_arr)
 
             x_train, y_train, x_test, y_test = (
                 train_arr[:, :-1],
