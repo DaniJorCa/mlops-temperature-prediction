@@ -21,7 +21,7 @@ jobs:
 
       - name: Find latest dated folder
         run: |
-            MODEL_PATH=$(find artifacts -name "model.pkl" -type f -printf '%T@ %p\n' | sort -nr | head -n 1 | cut -d' ' -f2-)
+            MODEL_PATH=$(find artifacts -name "model_predictor.pkl" -type f -printf '%T@ %p\n' | sort -nr | head -n 1 | cut -d' ' -f2-)
             echo "MODEL_PATH=$MODEL_PATH" >> $GITHUB_ENV
 
       - name: Debug
